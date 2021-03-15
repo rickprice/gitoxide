@@ -32,7 +32,7 @@ pub enum Scheme {
 
 impl fmt::Display for Scheme {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        use Scheme::*;
+        use Scheme::{File, Git, Http, Https, Radicle, Ssh};
         f.write_str(match self {
             File => "file",
             Git => "git",
@@ -65,7 +65,7 @@ pub struct Url {
 
 impl Default for Url {
     fn default() -> Self {
-        Url {
+        Self {
             scheme: Scheme::Ssh,
             user: None,
             host: None,

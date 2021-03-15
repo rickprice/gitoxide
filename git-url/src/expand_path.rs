@@ -77,6 +77,7 @@ pub fn parse(path: &BStr) -> Result<(Option<ForUser>, BString), Error> {
 }
 
 /// Expand `path` for use in a shell and return the expanded path.
+#[must_use]
 pub fn for_shell(path: BString) -> BString {
     use bstr::ByteVec;
     match parse(path.as_slice().as_bstr()) {

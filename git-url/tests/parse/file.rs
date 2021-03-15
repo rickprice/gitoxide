@@ -36,7 +36,7 @@ fn non_utf8_file_path_without_protocol() -> crate::Result {
     assert_eq!(parsed, url(Scheme::File, None, None, None, b"/path/to\xff/git",));
     assert_eq!(
         parsed.to_string(),
-        "file:///path/to�/git",
+        "file:///path/to\u{fffd}/git",
         "non-unicode is made unicode safe"
     );
     Ok(())
