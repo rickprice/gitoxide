@@ -62,11 +62,11 @@ const COMMIT_DATA_CHUNK_ID: ChunkId = *b"CDAT";
 const EXTENDED_EDGES_LIST_CHUNK_ID: ChunkId = *b"EDGE";
 const OID_FAN_CHUNK_ID: ChunkId = *b"OIDF";
 const OID_LOOKUP_CHUNK_ID: ChunkId = *b"OIDL";
-const SENTINEL_CHUNK_ID: ChunkId = [0u8; 4];
+const SENTINEL_CHUNK_ID: ChunkId = [0; 4];
 
 impl File {
     /// Try to parse the commit graph file at `path`.
-    pub fn at(path: impl AsRef<Path>) -> Result<File, Error> {
+    pub fn at(path: impl AsRef<Path>) -> Result<Self, Error> {
         Self::try_from(path.as_ref())
     }
 }
@@ -128,11 +128,11 @@ impl TryFrom<&Path> for File {
 
         let mut base_graphs_list_offset: Option<usize> = None;
         let mut commit_data_offset: Option<usize> = None;
-        let mut commit_data_count = 0u32;
+        let mut commit_data_count = 0;
         let mut extra_edges_list_range: Option<Range<usize>> = None;
         let mut fan_offset: Option<usize> = None;
         let mut oid_lookup_offset: Option<usize> = None;
-        let mut oid_lookup_count = 0u32;
+        let mut oid_lookup_count = 0;
 
         let mut chunk_id: ChunkId = data[ofs..ofs + 4].try_into().expect("ChunkId to accept 4 bytes");
         ofs += 4;
@@ -306,7 +306,7 @@ impl TryFrom<&Path> for File {
                 chunk2_commits: commit_data_count,
             });
         }
-        Ok(File {
+        Ok(Self {
             base_graph_count,
             base_graphs_list_offset,
             commit_data_offset,

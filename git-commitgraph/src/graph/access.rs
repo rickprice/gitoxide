@@ -10,12 +10,14 @@ impl Graph {
     ///
     /// # Panics
     /// If `pos` is greater or equal to [`num_commits()`][Graph::num_commits()].
+    #[must_use]
     pub fn commit_at(&self, pos: graph::Position) -> Commit<'_> {
         let r = self.lookup_by_pos(pos);
         r.file.commit_at(r.pos)
     }
 
     /// Returns the commit matching the given `id`.
+    #[must_use]
     pub fn commit_by_id(&self, id: borrowed::Id<'_>) -> Option<Commit<'_>> {
         let r = self.lookup_by_id(id)?;
         Some(r.file.commit_at(r.file_pos))
@@ -25,6 +27,7 @@ impl Graph {
     ///
     /// # Panics
     /// If `pos` is greater or equal to [`num_commits()`][Graph::num_commits()].
+    #[must_use]
     pub fn id_at(&self, pos: graph::Position) -> borrowed::Id<'_> {
         let r = self.lookup_by_pos(pos);
         r.file.id_at(r.pos)
@@ -32,22 +35,24 @@ impl Graph {
 
     /// Iterate over commits in unsorted order.
     pub fn iter_commits(&self) -> impl Iterator<Item = Commit<'_>> {
-        self.files.iter().flat_map(|file| file.iter_commits())
+        self.files.iter().flat_map(file::File::iter_commits)
     }
 
     /// Iterate over commit IDs in unsorted order.
     pub fn iter_ids(&self) -> impl Iterator<Item = borrowed::Id<'_>> {
-        self.files.iter().flat_map(|file| file.iter_ids())
+        self.files.iter().flat_map(file::File::iter_ids)
     }
 
     /// Translate the given `id` to its position in the file.
+    #[must_use]
     pub fn lookup(&self, id: borrowed::Id<'_>) -> Option<graph::Position> {
         Some(self.lookup_by_id(id)?.graph_pos)
     }
 
     /// Returns the number of commits stored in this file.
+    #[must_use]
     pub fn num_commits(&self) -> u32 {
-        self.files.iter().map(|f| f.num_commits()).sum()
+        self.files.iter().map(file::File::num_commits).sum()
     }
 }
 

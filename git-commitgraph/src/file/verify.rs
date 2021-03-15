@@ -58,6 +58,7 @@ pub struct Outcome {
 /// Verification
 impl File {
     /// Returns the trailing checksum over the entire content of this file.
+    #[must_use]
     pub fn checksum(&self) -> borrowed::Id<'_> {
         borrowed::Id::try_from(&self.data[self.data.len() - SHA1_SIZE..]).expect("file to be large enough for a hash")
     }
@@ -119,7 +120,7 @@ impl File {
             stats.min_generation = min(stats.min_generation, commit.generation());
             let parent_count = commit
                 .iter_parents()
-                .try_fold(0u32, |acc, pos| pos.map(|_| acc + 1))
+                .try_fold(0, |acc, pos| pos.map(|_| acc + 1))
                 .map_err(Error::Commit)?;
             *stats.parent_counts.entry(parent_count).or_insert(0) += 1;
             prev_id = commit.id();
@@ -160,7 +161,7 @@ impl File {
 fn verify_split_chain_filename_hash(path: impl AsRef<Path>, expected: borrowed::Id<'_>) -> Result<(), String> {
     let path = path.as_ref();
     path.file_name()
-        .and_then(|filename| filename.to_str())
+        .and_then(std::ffi::OsStr::to_str)
         .and_then(|filename| filename.strip_suffix(".graph"))
         .and_then(|stem| stem.strip_prefix("graph-"))
         .map_or(Ok(()), |hex| match owned::Id::from_40_bytes_in_hex(hex.as_bytes()) {

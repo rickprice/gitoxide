@@ -60,6 +60,7 @@ impl<'a> Commit<'a> {
     /// Returns the committer timestamp of this commit.
     ///
     /// The value is the number of seconds since 1970-01-01 00:00:00 UTC.
+    #[must_use]
     pub fn committer_timestamp(&self) -> u64 {
         self.commit_timestamp
     }
@@ -68,6 +69,7 @@ impl<'a> Commit<'a> {
     ///
     /// Commits without parents have generation number 1. Commits with parents have a generation
     /// number that is the max of their parents' generation numbers + 1.
+    #[must_use]
     pub fn generation(&self) -> u32 {
         self.generation
     }
@@ -84,6 +86,7 @@ impl<'a> Commit<'a> {
     }
 
     /// Returns the hash of this commit.
+    #[must_use]
     pub fn id(&self) -> borrowed::Id<'a> {
         self.file.id_at(self.pos)
     }
@@ -94,11 +97,13 @@ impl<'a> Commit<'a> {
     }
 
     /// Returns the position at which this commit is stored in the parent [File].
+    #[must_use]
     pub fn position(&self) -> file::Position {
         self.pos
     }
 
     /// Return the hash of the tree this commit points to.
+    #[must_use]
     pub fn root_tree_id(&self) -> borrowed::Id<'a> {
         self.root_tree_id
     }
@@ -227,14 +232,14 @@ enum ParentEdge {
 }
 
 impl ParentEdge {
-    pub fn from_raw(raw: u32) -> ParentEdge {
+    pub fn from_raw(raw: u32) -> Self {
         if raw == NO_PARENT {
-            return ParentEdge::None;
+            return Self::None;
         }
         if raw & EXTENDED_EDGES_MASK != 0 {
-            ParentEdge::ExtraEdgeIndex(raw & !EXTENDED_EDGES_MASK)
+            Self::ExtraEdgeIndex(raw & !EXTENDED_EDGES_MASK)
         } else {
-            ParentEdge::GraphPosition(graph::Position(raw))
+            Self::GraphPosition(graph::Position(raw))
         }
     }
 }

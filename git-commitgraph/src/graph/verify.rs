@@ -88,7 +88,7 @@ impl Graph {
             num_commits: 0,
             parent_counts: BTreeMap::new(),
         };
-        let mut max_generation = 0u32;
+        let mut max_generation = 0;
 
         // TODO: Detect duplicate commit IDs across different files. Not sure how to do this without
         //   a separate loop, e.g. self.iter_sorted_ids().
@@ -107,7 +107,7 @@ impl Graph {
 
             for (base_graph_index, (expected, actual)) in self.files[..file_index]
                 .iter()
-                .map(|base_file| base_file.checksum())
+                .map(file::File::checksum)
                 .zip(file.iter_base_graph_ids())
                 .enumerate()
             {
@@ -126,7 +126,7 @@ impl Graph {
             let next_file_start_pos = graph::Position(file_start_pos.0 + file.num_commits());
             let file_stats = file
                 .traverse(|commit| {
-                    let mut max_parent_generation = 0u32;
+                    let mut max_parent_generation = 0;
                     for parent_pos in commit.iter_parents() {
                         let parent_pos = parent_pos.map_err(Error::Commit)?;
                         if parent_pos >= next_file_start_pos {
@@ -185,7 +185,7 @@ impl Graph {
 
             max_generation = max(max_generation, file_stats.max_generation);
             stats.num_commits += file_stats.num_commits;
-            for (key, value) in file_stats.parent_counts.into_iter() {
+            for (key, value) in file_stats.parent_counts {
                 *stats.parent_counts.entry(key).or_insert(0) += value;
             }
             file_start_pos = next_file_start_pos;

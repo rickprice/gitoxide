@@ -56,10 +56,11 @@ pub fn check_common(cg: &Graph, expected: &HashMap<String, RefInfo, impl BuildHa
 
     assert_eq!(
         cg.iter_ids().collect::<HashSet<_>>(),
-        expected.values().map(|x| x.id()).collect::<HashSet<_>>()
+        expected.values().map(RefInfo::id).collect::<HashSet<_>>()
     );
 }
 
+#[must_use]
 pub fn create_repo(script_path: &str) -> tempfile::TempDir {
     let dir = tempfile::tempdir().expect("failed to create temp dir");
     let status = Command::new("bash")
@@ -72,10 +73,12 @@ pub fn create_repo(script_path: &str) -> tempfile::TempDir {
     dir
 }
 
+#[must_use]
 pub fn fixture_path(path: &str) -> PathBuf {
     PathBuf::from("tests").join("fixtures").join(path)
 }
 
+#[must_use]
 pub fn hex_to_id(hex: &[u8]) -> owned::Id {
     owned::Id::from_40_bytes_in_hex(hex).expect("40 bytes hex")
 }
@@ -88,18 +91,22 @@ pub struct RefInfo {
 }
 
 impl RefInfo {
+    #[must_use]
     pub fn id(&self) -> borrowed::Id {
         self.id.to_borrowed()
     }
 
+    #[must_use]
     pub fn pos(&self) -> GraphPosition {
         self.pos
     }
 
+    #[must_use]
     pub fn parent_ids(&self) -> impl IntoIterator<Item = borrowed::Id> {
-        self.parent_ids.iter().map(|x| x.to_borrowed())
+        self.parent_ids.iter().map(git_object::owned::Id::to_borrowed)
     }
 
+    #[must_use]
     pub fn root_tree_id(&self) -> borrowed::Id {
         self.root_tree_id.to_borrowed()
     }

@@ -10,6 +10,7 @@ use std::{
 /// Access
 impl File {
     /// The number of base graphs that this file depends on.
+    #[must_use]
     pub fn base_graph_count(&self) -> u8 {
         self.base_graph_count
     }
@@ -21,6 +22,7 @@ impl File {
     /// # Panics
     ///
     /// Panics if `pos` is out of bounds.
+    #[must_use]
     pub fn commit_at(&self, pos: file::Position) -> Commit<'_> {
         Commit::new(self, pos)
     }
@@ -28,6 +30,7 @@ impl File {
     /// The kind of hash used in this File.
     ///
     /// Note that it is always conforming to the hash used in the owning repository.
+    #[must_use]
     pub fn hash_kind(&self) -> HashKind {
         HashKind::Sha1
     }
@@ -35,6 +38,7 @@ impl File {
     /// Returns 20 bytes sha1 at the given index in our list of (sorted) sha1 hashes.
     /// The position ranges from 0 to self.num_commits()
     // copied from git-odb/src/pack/index/access.rs
+    #[must_use]
     pub fn id_at(&self, pos: file::Position) -> borrowed::Id<'_> {
         assert!(
             pos.0 < self.num_commits(),
@@ -71,6 +75,7 @@ impl File {
 
     /// Translate the given object hash to its position within this file, if present.
     // copied from git-odb/src/pack/index/access.rs
+    #[must_use]
     pub fn lookup(&self, id: borrowed::Id<'_>) -> Option<file::Position> {
         let first_byte = usize::from(id.first_byte());
         let mut upper_bound = self.fan[first_byte];
@@ -84,7 +89,7 @@ impl File {
             let mid = (lower_bound + upper_bound) / 2;
             let mid_sha = self.id_at(file::Position(mid));
 
-            use std::cmp::Ordering::*;
+            use std::cmp::Ordering::{Equal, Greater, Less};
             match id.cmp(&mid_sha) {
                 Less => upper_bound = mid,
                 Equal => return Some(file::Position(mid)),
@@ -98,11 +103,13 @@ impl File {
     ///
     /// The maximum valid `file::Position` that can be used with this file is one less than
     /// `num_commits()`.
+    #[must_use]
     pub fn num_commits(&self) -> u32 {
         self.fan[255]
     }
 
     /// Returns the path to this file.
+    #[must_use]
     pub fn path(&self) -> &Path {
         &self.path
     }
