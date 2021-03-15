@@ -28,6 +28,7 @@ impl<'a> Borrowed<'a> {
     }
 
     /// Return this instance as slice if it's [`Data`][Borrowed::Data].
+    #[must_use]
     pub fn as_slice(&self) -> Option<&[u8]> {
         match self {
             Borrowed::Data(d) => Some(d),
@@ -50,6 +51,7 @@ impl<'a> Borrowed<'a> {
     /// Check this instance's [`as_slice()`][Borrowed::as_slice()] is a valid [`Error`] and return it.
     ///
     /// This works for any data received in an error [channel][crate::Channel].
+    #[must_use]
     pub fn check_error(&self) -> Option<Error<'_>> {
         self.as_slice().and_then(|data| {
             if data.len() >= ERR_PREFIX.len() && &data[..ERR_PREFIX.len()] == ERR_PREFIX {
@@ -68,6 +70,7 @@ impl<'a> Borrowed<'a> {
     ///
     /// Note that this is only relevant in a side-band channel.
     /// See [`decode_band()`][Borrowed::decode_band()] in case `kind` is unknown.
+    #[must_use]
     pub fn to_band(&self, kind: Channel) -> Option<Band<'_>> {
         self.as_slice().map(|d| match kind {
             Channel::Data => Band::Data(d),
@@ -131,10 +134,12 @@ impl<'a> From<&'a [u8]> for Text<'a> {
 
 impl<'a> Text<'a> {
     /// Return this instance's data.
+    #[must_use]
     pub fn as_slice(&self) -> &[u8] {
         self.0
     }
     /// Return this instance's data as [`BStr`].
+    #[must_use]
     pub fn as_bstr(&self) -> &BStr {
         self.0.into()
     }

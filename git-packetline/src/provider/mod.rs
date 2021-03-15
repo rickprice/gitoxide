@@ -24,7 +24,7 @@ where
 {
     /// Return a new instance from `read` which will stop decoding packet lines when receiving one of the given `delimiters`.
     pub fn new(read: T, delimiters: &'static [PacketLine<'static>]) -> Self {
-        Provider {
+        Self {
             inner: read,
             buf: vec![0; MAX_LINE_LEN],
             peek_buf: Vec::new(),

@@ -89,7 +89,7 @@ fn prefixed_and_suffixed_data_to_write(
 }
 
 pub(crate) fn u16_to_hex(value: u16) -> [u8; 4] {
-    let mut buf = [0u8; 4];
+    let mut buf = [0; 4];
     hex::encode_to_slice((value as u16).to_be_bytes(), &mut buf).expect("two bytes to 4 hex chars never fails");
     buf
 }

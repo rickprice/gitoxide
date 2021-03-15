@@ -12,7 +12,7 @@ pub struct Writer<T> {
 impl<T: io::Write> Writer<T> {
     /// Create a new instance from the given `write`
     pub fn new(write: T) -> Self {
-        Writer {
+        Self {
             inner: write,
             binary: true,
         }
@@ -56,7 +56,7 @@ impl<T: io::Write> io::Write for Writer<T> {
                 crate::encode::text_to_write(data, &mut self.inner)
             }
             .map_err(|err| {
-                use crate::encode::Error::*;
+                use crate::encode::Error::{DataIsEmpty, DataLengthLimitExceeded, Io};
                 match err {
                     Io(err) => err,
                     DataIsEmpty | DataLengthLimitExceeded(_) => {
