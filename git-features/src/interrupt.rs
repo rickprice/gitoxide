@@ -23,9 +23,9 @@ mod _impl {
     pub fn init_handler(mut message_channel: impl io::Write + Send + 'static) {
         ctrlc::set_handler(move || {
             const MESSAGES: &[&str] = &[
-                "interrupt requested", 
-                "please wait…", 
-                "the program will respond soon…", 
+                "interrupt requested",
+                "please wait…",
+                "the program will respond soon…",
                 "if the program doesn't respond quickly enough, please let us know here: https://github.com/Byron/gitoxide/issues"
             ];
             static CURRENT_MESSAGE: AtomicUsize = AtomicUsize::new(0);
@@ -134,7 +134,7 @@ pub struct ResetOnDrop {
 
 impl Default for ResetOnDrop {
     fn default() -> Self {
-        ResetOnDrop {
+        Self {
             was_interrupted: is_triggered(),
         }
     }

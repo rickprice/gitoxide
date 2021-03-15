@@ -5,6 +5,7 @@ pub use prodash::progress::{Discard, DoOrDiscard, Either, ThroughputOnDrop};
 pub use prodash::{unit, Progress, Unit};
 
 /// A unit for displaying bytes with throughput and progress percentage.
+#[must_use]
 pub fn bytes() -> Option<Unit> {
     Some(unit::dynamic_and_mode(
         unit::Bytes,
@@ -13,6 +14,7 @@ pub fn bytes() -> Option<Unit> {
 }
 
 /// A unit for displaying human readable numbers with throughput and progress percentage.
+#[must_use]
 pub fn count(name: &'static str) -> Option<Unit> {
     Some(unit::dynamic_and_mode(
         unit::Human::new(
@@ -28,6 +30,7 @@ pub fn count(name: &'static str) -> Option<Unit> {
 }
 
 /// A predefined unit for displaying a multi-step progress
+#[must_use]
 pub fn steps() -> Option<Unit> {
     Some(unit::dynamic(unit::Range::new("steps")))
 }

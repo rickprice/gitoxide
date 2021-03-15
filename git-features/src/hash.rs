@@ -18,6 +18,7 @@ mod _impl {
             self.0.update(bytes)
         }
         /// Finalize the hash and produce a digest.
+        #[must_use]
         pub fn digest(self) -> Sha1Digest {
             self.0.digest().bytes()
         }
@@ -55,6 +56,7 @@ pub use _impl::Sha1;
 /// When calling this function for the first time, `previous_value` should be `0`. Otherwise it
 /// should be the previous return value of this function to provide a hash of multiple sequential
 /// chunks of `bytes`.
+#[must_use]
 pub fn crc32_update(previous_value: u32, bytes: &[u8]) -> u32 {
     crc::crc32::update(previous_value, &crc::crc32::IEEE_TABLE, bytes)
 }
@@ -90,7 +92,7 @@ pub fn bytes_of_file(
     let mut file = std::fs::File::open(path)?;
     use std::io::Read;
     const BUF_SIZE: usize = u16::MAX as usize;
-    let mut buf = [0u8; BUF_SIZE];
+    let mut buf = [0; BUF_SIZE];
     let mut bytes_left = num_bytes_from_start;
 
     while bytes_left > 0 {

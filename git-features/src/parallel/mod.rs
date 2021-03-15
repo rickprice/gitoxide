@@ -15,13 +15,14 @@ pub use eager::{EagerIter, EagerIterIf};
 /// A no-op returning the input _(`desired_chunk_size`, `Some(thread_limit)`, `thread_limit)_ used
 /// when the `parallel` feature toggle is not set.
 #[cfg(not(feature = "parallel"))]
+#[must_use]
 pub fn optimize_chunk_size_and_thread_limit(
     desired_chunk_size: usize,
     _num_items: Option<usize>,
     thread_limit: Option<usize>,
     _available_threads: Option<usize>,
 ) -> (usize, Option<usize>, usize) {
-    return (desired_chunk_size, thread_limit, num_threads(thread_limit));
+    (desired_chunk_size, thread_limit, num_threads(thread_limit))
 }
 
 /// Return the 'optimal' _(`size of chunks`,  `amount of threads as Option`, `amount of threads`)_ to use in [`in_parallel()`] for the given
@@ -80,7 +81,7 @@ pub fn optimize_chunk_size_and_thread_limit(
 /// Always returns 1, available when the `parallel` feature toggle is unset.
 #[cfg(not(feature = "parallel"))]
 pub(crate) fn num_threads(_thread_limit: Option<usize>) -> usize {
-    return 1;
+    1
 }
 
 /// Returns the amount of threads the system can effectively use as the amount of its logical cores.

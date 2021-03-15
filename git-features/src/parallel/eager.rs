@@ -42,7 +42,7 @@ where
                 sender.send(out).ok();
             }
         });
-        EagerIter {
+        Self {
             receiver,
             chunk: None,
             size_hint,
@@ -54,7 +54,7 @@ where
             assert!(!v.is_empty());
             v.into_iter()
         });
-        self.chunk.as_mut().and_then(|c| c.next())
+        self.chunk.as_mut().and_then(std::iter::Iterator::next)
     }
 }
 
@@ -95,9 +95,9 @@ where
     /// For all other parameters, please see [`EagerIter::new()`].
     pub fn new(condition: impl FnOnce() -> bool, iter: I, chunk_size: usize, chunks_in_flight: usize) -> Self {
         if condition() {
-            EagerIterIf::Eager(EagerIter::new(iter, chunk_size, chunks_in_flight))
+            Self::Eager(EagerIter::new(iter, chunk_size, chunks_in_flight))
         } else {
-            EagerIterIf::OnDemand(iter)
+            Self::OnDemand(iter)
         }
     }
 }
@@ -110,15 +110,15 @@ where
 
     fn next(&mut self) -> Option<Self::Item> {
         match self {
-            EagerIterIf::OnDemand(i) => i.next(),
-            EagerIterIf::Eager(i) => i.next(),
+            Self::OnDemand(i) => i.next(),
+            Self::Eager(i) => i.next(),
         }
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
         match self {
-            EagerIterIf::OnDemand(i) => i.size_hint(),
-            EagerIterIf::Eager(i) => i.size_hint(),
+            Self::OnDemand(i) => i.size_hint(),
+            Self::Eager(i) => i.size_hint(),
         }
     }
 }
