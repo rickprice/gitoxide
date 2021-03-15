@@ -11,6 +11,7 @@ pub enum IterationMode {
 }
 
 impl IterationMode {
+    #[must_use]
     pub fn variants() -> &'static [&'static str] {
         &["as-is", "verify", "restore"]
     }
@@ -18,7 +19,7 @@ impl IterationMode {
 
 impl Default for IterationMode {
     fn default() -> Self {
-        IterationMode::Verify
+        Self::Verify
     }
 }
 
@@ -26,7 +27,7 @@ impl FromStr for IterationMode {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        use IterationMode::*;
+        use IterationMode::{AsIs, Restore, Verify};
         let slc = s.to_ascii_lowercase();
         Ok(match slc.as_str() {
             "as-is" => AsIs,
@@ -39,7 +40,7 @@ impl FromStr for IterationMode {
 
 impl From<IterationMode> for pack::data::iter::Mode {
     fn from(v: IterationMode) -> Self {
-        use pack::data::iter::Mode::*;
+        use pack::data::iter::Mode::{AsIs, Restore, Verify};
         match v {
             IterationMode::AsIs => AsIs,
             IterationMode::Verify => Verify,

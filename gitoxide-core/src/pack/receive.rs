@@ -50,7 +50,7 @@ impl<W: io::Write> git_protocol::fetch::Delegate for CloneDelegate<W> {
         _refs: &[Ref],
     ) -> Action {
         if version == git_transport::Protocol::V1 {
-            self.ref_filter = Some(&FILTER);
+            self.ref_filter = Some(FILTER);
         }
         Action::Continue
     }
@@ -124,7 +124,7 @@ pub struct JSONBundleWriteOutcome {
 
 impl From<pack::index::write::Outcome> for JSONBundleWriteOutcome {
     fn from(v: pack::index::write::Outcome) -> Self {
-        JSONBundleWriteOutcome {
+        Self {
             index_kind: v.index_kind,
             num_objects: v.num_objects,
             data_hash: v.data_hash.to_string(),
@@ -145,8 +145,9 @@ pub struct JSONOutcome {
 }
 
 impl JSONOutcome {
+    #[must_use]
     pub fn from_outcome_and_refs(v: pack::bundle::write::Outcome, refs: &[Ref]) -> Self {
-        JSONOutcome {
+        Self {
             index: v.index.into(),
             pack_kind: v.pack_kind,
             index_path: v.index_path,

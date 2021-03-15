@@ -14,7 +14,7 @@ pub struct Context<W1: io::Write, W2: io::Write> {
 
 impl Default for Context<Vec<u8>, Vec<u8>> {
     fn default() -> Self {
-        Context {
+        Self {
             err: Vec::new(),
             out: Vec::new(),
             output_statistics: None,
@@ -58,7 +58,7 @@ fn print_statistics(out: &mut impl io::Write, stats: &Outcome) -> io::Result<()>
     writeln!(out, "number of commits with the given number of parents")?;
     let mut parent_counts: Vec<_> = stats.parent_counts.iter().map(|(a, b)| (*a, *b)).collect();
     parent_counts.sort_by_key(|e| e.0);
-    for (parent_count, commit_count) in parent_counts.into_iter() {
+    for (parent_count, commit_count) in parent_counts {
         writeln!(out, "\t{:>2}: {}", parent_count, commit_count)?;
     }
     writeln!(out, "\t->: {}", stats.num_commits)?;

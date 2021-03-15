@@ -14,11 +14,12 @@ pub enum SafetyCheck {
 
 impl Default for SafetyCheck {
     fn default() -> Self {
-        SafetyCheck::All
+        Self::All
     }
 }
 
 impl SafetyCheck {
+    #[must_use]
     pub fn variants() -> &'static [&'static str] {
         &[
             "all",
@@ -34,12 +35,12 @@ impl std::str::FromStr for SafetyCheck {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(match s {
-            "skip-file-checksum" => SafetyCheck::SkipFileChecksumVerification,
-            "skip-file-and-object-checksum" => SafetyCheck::SkipFileAndObjectChecksumVerification,
+            "skip-file-checksum" => Self::SkipFileChecksumVerification,
+            "skip-file-and-object-checksum" => Self::SkipFileAndObjectChecksumVerification,
             "skip-file-and-object-checksum-and-no-abort-on-decode" => {
-                SafetyCheck::SkipFileAndObjectChecksumVerificationAndNoAbortOnDecodeError
+                Self::SkipFileAndObjectChecksumVerificationAndNoAbortOnDecodeError
             }
-            "all" => SafetyCheck::All,
+            "all" => Self::All,
             _ => return Err(format!("Unknown value for safety check: '{}'", s)),
         })
     }
@@ -47,7 +48,10 @@ impl std::str::FromStr for SafetyCheck {
 
 impl From<SafetyCheck> for pack::index::traverse::SafetyCheck {
     fn from(v: SafetyCheck) -> Self {
-        use pack::index::traverse::SafetyCheck::*;
+        use pack::index::traverse::SafetyCheck::{
+            All, SkipFileAndObjectChecksumVerification, SkipFileAndObjectChecksumVerificationAndNoAbortOnDecodeError,
+            SkipFileChecksumVerification,
+        };
         match v {
             SafetyCheck::All => All,
             SafetyCheck::SkipFileChecksumVerification => SkipFileChecksumVerification,
@@ -107,8 +111,8 @@ impl git_odb::Write for OutputWriter {
 
     fn write_buf(&self, kind: git_object::Kind, from: &[u8], hash: HashKind) -> Result<owned::Id, Self::Error> {
         match self {
-            OutputWriter::Loose(db) => db.write_buf(kind, from, hash).map_err(Into::into),
-            OutputWriter::Sink(db) => db.write_buf(kind, from, hash).map_err(Into::into),
+            Self::Loose(db) => db.write_buf(kind, from, hash).map_err(Into::into),
+            Self::Sink(db) => db.write_buf(kind, from, hash).map_err(Into::into),
         }
     }
 
@@ -120,8 +124,8 @@ impl git_odb::Write for OutputWriter {
         hash: HashKind,
     ) -> Result<owned::Id, Self::Error> {
         match self {
-            OutputWriter::Loose(db) => db.write_stream(kind, size, from, hash).map_err(Into::into),
-            OutputWriter::Sink(db) => db.write_stream(kind, size, from, hash).map_err(Into::into),
+            Self::Loose(db) => db.write_stream(kind, size, from, hash).map_err(Into::into),
+            Self::Sink(db) => db.write_stream(kind, size, from, hash).map_err(Into::into),
         }
     }
 }
@@ -129,8 +133,8 @@ impl git_odb::Write for OutputWriter {
 impl OutputWriter {
     fn new(path: Option<impl AsRef<Path>>, compress: bool) -> Self {
         match path {
-            Some(path) => OutputWriter::Loose(loose::Db::at(path.as_ref())),
-            None => OutputWriter::Sink(git_odb::sink().compress(compress)),
+            Some(path) => Self::Loose(loose::Db::at(path.as_ref())),
+            None => Self::Sink(git_odb::sink().compress(compress)),
         }
     }
 }

@@ -11,6 +11,7 @@ pub enum OutputFormat {
 }
 
 impl OutputFormat {
+    #[must_use]
     pub fn variants() -> &'static [&'static str] {
         &[
             "human",
@@ -26,7 +27,7 @@ impl FromStr for OutputFormat {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let s_lc = s.to_ascii_lowercase();
         Ok(match s_lc.as_str() {
-            "human" => OutputFormat::Human,
+            "human" => Self::Human,
             #[cfg(feature = "serde1")]
             "json" => OutputFormat::Json,
             _ => return Err(format!("Invalid output format: '{}'", s)),

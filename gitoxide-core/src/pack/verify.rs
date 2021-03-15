@@ -15,6 +15,7 @@ pub enum Algorithm {
 }
 
 impl Algorithm {
+    #[must_use]
     pub fn variants() -> &'static [&'static str] {
         &["less-time", "less-memory"]
     }
@@ -26,8 +27,8 @@ impl FromStr for Algorithm {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let s_lc = s.to_ascii_lowercase();
         Ok(match s_lc.as_str() {
-            "less-memory" => Algorithm::LessMemory,
-            "less-time" => Algorithm::LessTime,
+            "less-memory" => Self::LessMemory,
+            "less-time" => Self::LessTime,
             _ => return Err(format!("Invalid verification algorithm: '{}'", s)),
         })
     }
@@ -36,8 +37,8 @@ impl FromStr for Algorithm {
 impl From<Algorithm> for index::traverse::Algorithm {
     fn from(v: Algorithm) -> Self {
         match v {
-            Algorithm::LessMemory => index::traverse::Algorithm::Lookup,
-            Algorithm::LessTime => index::traverse::Algorithm::DeltaTreeLookup,
+            Algorithm::LessMemory => Self::Lookup,
+            Algorithm::LessTime => Self::DeltaTreeLookup,
         }
     }
 }
@@ -60,7 +61,7 @@ pub struct Context<W1: io::Write, W2: io::Write> {
 
 impl Default for Context<Vec<u8>, Vec<u8>> {
     fn default() -> Self {
-        Context {
+        Self {
             output_statistics: None,
             thread_limit: None,
             mode: index::verify::Mode::Sha1CRC32,
@@ -80,15 +81,15 @@ enum EitherCache {
 impl pack::cache::DecodeEntry for EitherCache {
     fn put(&mut self, offset: u64, data: &[u8], kind: Kind, compressed_size: usize) {
         match self {
-            EitherCache::Left(v) => v.put(offset, data, kind, compressed_size),
-            EitherCache::Right(v) => v.put(offset, data, kind, compressed_size),
+            Self::Left(v) => v.put(offset, data, kind, compressed_size),
+            Self::Right(v) => v.put(offset, data, kind, compressed_size),
         }
     }
 
     fn get(&mut self, offset: u64, out: &mut Vec<u8>) -> Option<(Kind, usize)> {
         match self {
-            EitherCache::Left(v) => v.get(offset, out),
-            EitherCache::Right(v) => v.get(offset, out),
+            Self::Left(v) => v.get(offset, out),
+            Self::Right(v) => v.get(offset, out),
         }
     }
 }
@@ -110,7 +111,7 @@ where
     W2: io::Write,
 {
     let path = path.as_ref();
-    let ext = path.extension().and_then(|ext| ext.to_str()).ok_or_else(|| {
+    let ext = path.extension().and_then(std::ffi::OsStr::to_str).ok_or_else(|| {
         anyhow!(
             "Cannot determine data type on path without extension '{}', expecting default extensions 'idx' and 'pack'",
             path.display()
@@ -172,7 +173,7 @@ fn print_statistics(out: &mut impl io::Write, stats: &index::traverse::Outcome) 
     let mut chain_length_to_object: Vec<_> = stats.objects_per_chain_length.iter().map(|(a, b)| (*a, *b)).collect();
     chain_length_to_object.sort_by_key(|e| e.0);
     let mut total_object_count = 0;
-    for (chain_length, object_count) in chain_length_to_object.into_iter() {
+    for (chain_length, object_count) in chain_length_to_object {
         total_object_count += object_count;
         writeln!(out, "\t{:>2}: {}", chain_length, object_count)?;
     }

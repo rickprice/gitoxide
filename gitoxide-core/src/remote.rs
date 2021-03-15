@@ -94,16 +94,16 @@ pub mod refs {
     impl From<Ref> for JsonRef {
         fn from(value: Ref) -> Self {
             match value {
-                Ref::Direct { path, object } => JsonRef::Direct {
+                Ref::Direct { path, object } => Self::Direct {
                     path: path.to_string(),
                     object: object.to_string(),
                 },
-                Ref::Symbolic { path, target, object } => JsonRef::Symbolic {
+                Ref::Symbolic { path, target, object } => Self::Symbolic {
                     path: path.to_string(),
                     target: target.to_string(),
                     object: object.to_string(),
                 },
-                Ref::Peeled { path, tag, object } => JsonRef::Peeled {
+                Ref::Peeled { path, tag, object } => Self::Peeled {
                     path: path.to_string(),
                     tag: tag.to_string(),
                     object: object.to_string(),
