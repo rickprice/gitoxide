@@ -13,11 +13,13 @@ pub struct Digest<'a>(&'a [u8; SIZE_OF_SHA1_DIGEST]);
 /// Access
 impl<'a> Digest<'a> {
     /// The kind of hash used for this Digest
-    pub fn kind(&self) -> crate::Kind {
+    #[must_use]
+    pub const fn kind(&self) -> crate::Kind {
         crate::Kind::Sha1
     }
     /// The first byte of the hash, commonly used to partition a set of `Digest`s
-    pub fn first_byte(&self) -> u8 {
+    #[must_use]
+    pub const fn first_byte(&self) -> u8 {
         self.0[0]
     }
 }
@@ -27,8 +29,9 @@ impl<'a> Digest<'a> {
     /// Returns an array with a hexadecimal encoded version of the Sha1 hash this `Digest` represents.
     ///
     /// **Panics** if this is not a Sha1 hash, as identifiable by [`Digest::kind()`].
+    #[must_use]
     pub fn to_sha1_hex(&self) -> [u8; SIZE_OF_SHA1_DIGEST * 2] {
-        let mut buf = [0u8; SIZE_OF_SHA1_DIGEST * 2];
+        let mut buf = [0; SIZE_OF_SHA1_DIGEST * 2];
         hex::encode_to_slice(self.0, &mut buf).expect("to count correctly");
         buf
     }
@@ -36,13 +39,15 @@ impl<'a> Digest<'a> {
     /// Returns the bytes making up the Sha1.
     ///
     /// **Panics** if this is not a Sha1 hash, as identifiable by [`Digest::kind()`].
-    pub fn sha1(&self) -> &[u8; SIZE_OF_SHA1_DIGEST] {
+    #[must_use]
+    pub const fn sha1(&self) -> &[u8; SIZE_OF_SHA1_DIGEST] {
         self.0
     }
 
     /// Returns a Sha1 digest with all bytes being initialized to zero.
-    pub fn null_sha1() -> Self {
-        Digest(&[0u8; SIZE_OF_SHA1_DIGEST])
+    #[must_use]
+    pub const fn null_sha1() -> Self {
+        Digest(&[0; SIZE_OF_SHA1_DIGEST])
     }
 }
 

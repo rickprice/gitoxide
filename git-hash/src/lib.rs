@@ -25,7 +25,7 @@ pub enum Kind {
 
 impl Default for Kind {
     fn default() -> Self {
-        Kind::Sha1
+        Self::Sha1
     }
 }
 
@@ -34,7 +34,7 @@ mod convert {
 
     impl<'a> From<borrowed::Digest<'a>> for owned::Digest {
         fn from(v: borrowed::Digest<'a>) -> Self {
-            owned::Digest::from_borrowed_sha1(v.sha1())
+            Self::from_borrowed_sha1(v.sha1())
         }
     }
 }
