@@ -26,10 +26,11 @@ pub enum Service {
 
 impl Service {
     /// Render this instance as string recognized by the git transport layer.
+    #[must_use]
     pub fn as_str(&self) -> &'static str {
         match self {
-            Service::ReceivePack => "git-receive-pack",
-            Service::UploadPack => "git-upload-pack",
+            Self::ReceivePack => "git-receive-pack",
+            Self::UploadPack => "git-upload-pack",
         }
     }
 }

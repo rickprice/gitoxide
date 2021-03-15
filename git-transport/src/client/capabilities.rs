@@ -45,6 +45,7 @@ impl<'a> Capability<'a> {
     /// Returns the name of the capability.
     ///
     /// Most capabilities only consist of a name, making them appear like a feature toggle.
+    #[must_use]
     pub fn name(&self) -> &BStr {
         self.0
             .splitn(2, |b| *b == b'=')
@@ -56,10 +57,12 @@ impl<'a> Capability<'a> {
     ///
     /// Note that the caller must know whether a single or multiple values are expected, in which
     /// case [`values()`][Capability::values()] should be called.
+    #[must_use]
     pub fn value(&self) -> Option<&BStr> {
         self.0.splitn(2, |b| *b == b'=').nth(1).map(|s| s.as_bstr())
     }
     /// Returns the values of a capability if its [`value()`][Capability::value()] is space separated.
+    #[must_use]
     pub fn values(&self) -> Option<impl Iterator<Item = &BStr>> {
         self.value().map(|v| v.split(|b| *b == b' ').map(|s| s.as_bstr()))
     }
@@ -69,14 +72,14 @@ impl Capabilities {
     /// Parse capabilities from the given `bytes`.
     ///
     /// Useful in case they are encoded within a `ref` behind a null byte.
-    pub fn from_bytes(bytes: &[u8]) -> Result<(Capabilities, usize), Error> {
+    pub fn from_bytes(bytes: &[u8]) -> Result<(Self, usize), Error> {
         let delimiter_pos = bytes.find_byte(0).ok_or(Error::MissingDelimitingNullByte)?;
         if delimiter_pos + 1 == bytes.len() {
             return Err(Error::NoCapabilities);
         }
         let capabilities = &bytes[delimiter_pos + 1..];
         Ok((
-            Capabilities {
+            Self {
                 data: capabilities.as_bstr().to_owned(),
                 value_sep: b' ',
             },
@@ -86,7 +89,7 @@ impl Capabilities {
     /// Parse capabilities from the given `read`.
     ///
     /// Useful for parsing capabilities from a data sent from a server.
-    pub fn from_lines(read: impl io::BufRead) -> Result<Capabilities, Error> {
+    pub fn from_lines(read: impl io::BufRead) -> Result<Self, Error> {
         let mut lines = read.lines();
         let version_line = lines.next().ok_or(Error::MissingVersionLine)??;
         let (name, value) = version_line.split_at(
@@ -100,7 +103,7 @@ impl Capabilities {
         if value != " 2" {
             return Err(Error::UnsupportedVersion(Protocol::V2, value.to_owned()));
         }
-        Ok(Capabilities {
+        Ok(Self {
             value_sep: b'\n',
             data: lines
                 .inspect(|l| {
@@ -119,11 +122,13 @@ impl Capabilities {
     }
 
     /// Returns true of the given `feature` is mentioned in this list of capabilities.
+    #[must_use]
     pub fn contains(&self, feature: &str) -> bool {
         self.capability(feature).is_some()
     }
 
     /// Returns the capability with `name`.
+    #[must_use]
     pub fn capability(&self, name: &str) -> Option<Capability<'_>> {
         self.iter().find(|c| c.name() == name.as_bytes().as_bstr())
     }

@@ -96,11 +96,11 @@ fn handshake_v1_and_request() -> crate::Result {
     })));
     let mut pack = Vec::new();
     reader.read_to_end(&mut pack)?;
-    assert_eq!(pack.len(), 876, "we receive the whole pack…");
+    assert_eq!(pack.len(), 876, "we receive the whole pack\u{2026}");
 
     drop(reader);
     let sidebands = Rc::try_unwrap(messages).expect("no other handle").into_inner();
-    assert_eq!(sidebands.len(), 6, "…along with some status messages");
+    assert_eq!(sidebands.len(), 6, "\u{2026}along with some status messages");
     c.close()?;
 
     assert_eq!(

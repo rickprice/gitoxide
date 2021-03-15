@@ -86,7 +86,7 @@ pub enum WriteMode {
 
 impl Default for WriteMode {
     fn default() -> Self {
-        WriteMode::OneLFTerminatedLinePerWriteCall
+        Self::OneLFTerminatedLinePerWriteCall
     }
 }
 

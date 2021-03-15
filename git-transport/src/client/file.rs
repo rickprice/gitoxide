@@ -54,20 +54,20 @@ impl SpawnProcessOnDemand {
         env: impl IntoIterator<Item = (&'static str, impl Into<String>)>,
         path: BString,
         version: Protocol,
-    ) -> SpawnProcessOnDemand {
-        SpawnProcessOnDemand {
+    ) -> Self {
+        Self {
             url,
             path,
             ssh_program: Some(program),
-            ssh_args: args.into_iter().map(|s| s.into()).collect(),
+            ssh_args: args.into_iter().map(std::convert::Into::into).collect(),
             ssh_env: env.into_iter().map(|(k, v)| (k, v.into())).collect(),
             child: None,
             connection: None,
             desired_version: version,
         }
     }
-    pub(crate) fn new_local(path: BString, version: Protocol) -> SpawnProcessOnDemand {
-        SpawnProcessOnDemand {
+    pub(crate) fn new_local(path: BString, version: Protocol) -> Self {
+        Self {
             url: git_url::Url {
                 scheme: git_url::Scheme::File,
                 user: None,

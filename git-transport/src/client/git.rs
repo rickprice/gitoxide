@@ -154,7 +154,7 @@ where
         virtual_host: Option<(impl Into<String>, Option<u16>)>,
         mode: ConnectMode,
     ) -> Self {
-        Connection {
+        Self {
             writer: write,
             line_provider: git_packetline::Provider::new(read, &[PacketLine::Flush]),
             path: repository_path.into(),
