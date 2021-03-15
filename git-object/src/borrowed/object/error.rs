@@ -28,7 +28,7 @@ quick_error! {
 
 impl Error {
     fn set_parse_context(mut self, ctx: &'static str) -> Self {
-        if let Error::NomDetail(_, ref mut message) = self {
+        if let Self::NomDetail(_, ref mut message) = self {
             *message = ctx
         }
         self
@@ -41,7 +41,7 @@ impl Error {
 
 impl ParseError<&[u8]> for Error {
     fn from_error_kind(input: &[u8], _kind: nom::error::ErrorKind) -> Self {
-        Error::NomDetail(input.into(), "parse error")
+        Self::NomDetail(input.into(), "parse error")
     }
 
     fn append(_: &[u8], _: nom::error::ErrorKind, other: Self) -> Self {
@@ -50,9 +50,9 @@ impl ParseError<&[u8]> for Error {
 }
 
 impl From<nom::Err<Error>> for Error {
-    fn from(e: nom::Err<Error>) -> Self {
+    fn from(e: nom::Err<Self>) -> Self {
         match e {
-            nom::Err::Error(err) | nom::Err::Failure(err) => Error::Nom(err.to_string()),
+            nom::Err::Error(err) | nom::Err::Failure(err) => Self::Nom(err.to_string()),
             nom::Err::Incomplete(_) => unreachable!("we do not implement streaming parsers"),
         }
     }

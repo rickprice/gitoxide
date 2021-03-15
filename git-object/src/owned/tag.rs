@@ -20,7 +20,7 @@ quick_error! {
 
 impl From<Error> for io::Error {
     fn from(err: Error) -> Self {
-        io::Error::new(io::ErrorKind::Other, err)
+        Self::new(io::ErrorKind::Other, err)
     }
 }
 
@@ -58,7 +58,7 @@ impl Tag {
         }
         if let Some(ref message) = self.pgp_signature {
             out.write_all(NL)?;
-            out.write_all(&message)?;
+            out.write_all(message)?;
         }
         Ok(())
     }

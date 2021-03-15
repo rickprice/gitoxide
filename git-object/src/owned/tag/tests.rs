@@ -1,6 +1,6 @@
 mod validated_name {
     mod invalid {
-        use super::super::super::*;
+        use super::super::super::validated_name;
         use bstr::ByteSlice;
 
         #[test]
@@ -14,7 +14,7 @@ mod validated_name {
     }
 
     mod valid {
-        use super::super::super::*;
+        use super::super::super::validated_name;
         use bstr::ByteSlice;
 
         #[test]

@@ -37,6 +37,7 @@ impl<'a> Tag<'a> {
         parse(data).map(|(_, t)| t).map_err(Error::from)
     }
     /// The object this tag points to as `Id`.
+    #[must_use]
     pub fn target(&self) -> owned::Id {
         owned::Id::from_40_bytes_in_hex(self.target).expect("prior validation")
     }
@@ -83,7 +84,7 @@ fn parse_message(i: &[u8]) -> IResult<&[u8], (&BStr, Option<&BStr>), Error> {
         }
         // an empty signature message signals that there is none - the function signature is needed
         // to work with 'alt(…)'. PGP signatures are never empty
-        Ok((&[], (&i, &[])))
+        Ok((&[], (i, &[])))
     }
     let (i, (message, signature)) = alt((
         tuple((

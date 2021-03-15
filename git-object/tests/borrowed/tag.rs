@@ -38,7 +38,7 @@ mod from_bytes {
                 name: b"empty".as_bstr(),
                 target_kind: Kind::Commit,
                 message: b"".as_bstr(),
-                signature: Some(signature(1592381636)),
+                signature: Some(signature(1_592_381_636)),
                 pgp_signature: None
             }
         );
@@ -54,7 +54,7 @@ mod from_bytes {
                 name: b"baz".as_bstr(),
                 target_kind: Kind::Commit,
                 message: b"hello\n\nworld".as_bstr(),
-                signature: Some(signature(1592311808)),
+                signature: Some(signature(1_592_311_808)),
                 pgp_signature: None
             }
         );
@@ -102,7 +102,7 @@ KLMHist5yj0sw1E4hDTyQa0=
                 name: b"whitespace".as_bstr(),
                 target_kind: Kind::Commit,
                 message: b" \ttab\nnewline\n\nlast-with-trailer\n".as_bstr(), // odd, was created with \n\n actually
-                signature: Some(signature(1592382888)),
+                signature: Some(signature(1_592_382_888)),
                 pgp_signature: None
             }
         );
@@ -140,7 +140,7 @@ cjHJZXWmV4CcRfmLsXzU8s2cR9A0DBvOxhPD1TlKC2JhBFXigjuL9U4Rbq9tdegB
             name: b"Sebastian Thiel".as_bstr(),
             email: b"byronimo@gmail.com".as_bstr(),
             time: Time {
-                time: 1528473343,
+                time: 1_528_473_343,
                 offset,
                 sign: Sign::Plus,
             },

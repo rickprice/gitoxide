@@ -48,11 +48,13 @@ impl<'a> Commit<'a> {
         parse(data).map(|(_, t)| t).map_err(Error::from)
     }
     /// Return the `tree` fields hash digest.
+    #[must_use]
     pub fn tree(&self) -> owned::Id {
         owned::Id::from_40_bytes_in_hex(self.tree).expect("prior validation")
     }
 
     /// Returns a convenient iterator over all extra headers.
+    #[must_use]
     pub fn extra_headers(&self) -> commit::ExtraHeaders<impl Iterator<Item = (&BStr, &BStr)>> {
         commit::ExtraHeaders::new(self.extra_headers.iter().map(|(k, v)| (*k, v.as_ref())))
     }
@@ -65,7 +67,7 @@ fn parse_message(i: &[u8]) -> IResult<&[u8], &BStr, Error> {
     }
     let (i, _) = tag(NL)(i).map_err(Error::context("a newline separates headers from the message"))?;
     debug_assert!(!i.is_empty());
-    Ok((&[], &i.as_bstr()))
+    Ok((&[], i.as_bstr()))
 }
 
 fn parse(i: &[u8]) -> IResult<&[u8], Commit<'_>, Error> {

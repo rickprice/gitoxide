@@ -15,7 +15,7 @@ mod time {
             ),
             (
                 Time {
-                    time: 189009009,
+                    time: 189_009_009,
                     offset: 36000,
                     sign: Sign::Minus,
                 },
@@ -99,7 +99,7 @@ mod signature {
     fn round_trip() -> Result<(), Box<dyn std::error::Error>> {
         for input in &[
             &b"Sebastian Thiel <byronimo@gmail.com> 1 -0030"[..],
-            ".. ☺️Sebastian 王知明 Thiel🙌 .. <byronimo@gmail.com> 1528473343 +0230".as_bytes(),
+            ".. \u{263a}\u{fe0f}Sebastian \u{738b}\u{77e5}\u{660e} Thiel\u{1f64c} .. <byronimo@gmail.com> 1528473343 +0230".as_bytes(),
             ".. whitespace  \t  is explicitly allowed    - unicode aware trimming must be done elsewhere <byronimo@gmail.com> 1528473343 +0230".as_bytes(),
         ] {
             let signature: owned::Signature = borrowed::Signature::from_bytes(input)?.into();

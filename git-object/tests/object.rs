@@ -16,10 +16,12 @@ fn fixup(v: Vec<u8>) -> Vec<u8> {
     v.replace(b"\r\n", "\n")
 }
 
+#[must_use]
 pub fn hex_to_id(hex: &str) -> git_object::owned::Id {
     git_object::owned::Id::from_40_bytes_in_hex(hex.as_bytes()).expect("40 bytes hex")
 }
 
+#[must_use]
 pub fn fixture(path: &str) -> PathBuf {
     PathBuf::from("tests/fixtures").join(path)
 }

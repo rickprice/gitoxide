@@ -69,30 +69,31 @@ quick_error! {
     #[allow(missing_docs)]
     pub enum Error {
         InvalidObjectKind(kind: crate::BString) {
-            display("Unknown object kind: {:?}", std::str::from_utf8(&kind))
+            display("Unknown object kind: {:?}", std::str::from_utf8(kind))
         }
     }
 }
 
 impl Kind {
     /// Parse a `Kind` from its serialized loose git objects.
-    pub fn from_bytes(s: &[u8]) -> Result<Kind, Error> {
+    pub fn from_bytes(s: &[u8]) -> Result<Self, Error> {
         Ok(match s {
-            b"tree" => Kind::Tree,
-            b"blob" => Kind::Blob,
-            b"commit" => Kind::Commit,
-            b"tag" => Kind::Tag,
+            b"tree" => Self::Tree,
+            b"blob" => Self::Blob,
+            b"commit" => Self::Commit,
+            b"tag" => Self::Tag,
             _ => return Err(Error::InvalidObjectKind(s.into())),
         })
     }
 
     /// Return the name of `self` for use in serialized loose git objects.
+    #[must_use]
     pub fn to_bytes(&self) -> &[u8] {
         match self {
-            Kind::Tree => b"tree",
-            Kind::Commit => b"commit",
-            Kind::Blob => b"blob",
-            Kind::Tag => b"tag",
+            Self::Tree => b"tree",
+            Self::Commit => b"commit",
+            Self::Blob => b"blob",
+            Self::Tag => b"tag",
         }
     }
 }
@@ -113,10 +114,10 @@ pub mod tree {
     #[cfg_attr(feature = "serde1", derive(serde::Serialize, serde::Deserialize))]
     #[allow(missing_docs)]
     pub enum Mode {
-        Tree = 0o040000u16,
-        Blob = 0o100644,
-        BlobExecutable = 0o100755,
-        Link = 0o120000,
-        Commit = 0o160000,
+        Tree = 0o040_000_u16,
+        Blob = 0o100_644,
+        BlobExecutable = 0o100_755,
+        Link = 0o120_000,
+        Commit = 0o160_000,
     }
 }

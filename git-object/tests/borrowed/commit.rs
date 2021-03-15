@@ -26,8 +26,8 @@ mod from_bytes {
             Commit {
                 tree: b"1b2dfb4ac5e42080b682fc676e9738c94ce6d54d".as_bstr(),
                 parents: SmallVec::default(),
-                author: signature(1592437401),
-                committer: signature(1592437401),
+                author: signature(1_592_437_401),
+                committer: signature(1_592_437_401),
                 encoding: None,
                 message: b"without sig".as_bstr(),
                 extra_headers: vec![]
@@ -43,8 +43,8 @@ mod from_bytes {
             Commit {
                 tree: b"9bed6275068a0575243ba8409253e61af81ab2ff".as_bstr(),
                 parents: SmallVec::from(vec![b"26b4df046d1776c123ac69d918f5aec247b58cc6".as_bstr()]),
-                author: signature(1592448450),
-                committer: signature(1592448450),
+                author: signature(1_592_448_450),
+                committer: signature(1_592_448_450),
                 encoding: None,
                 message: b" nl".as_bstr(), // this one had a \n trailing it, but git seems to trim that
                 extra_headers: vec![]
@@ -60,8 +60,8 @@ mod from_bytes {
             Commit {
                 tree: b"00fc39317701176e326974ce44f5bd545a32ec0b".as_bstr(),
                 parents: SmallVec::from(vec![b"09d8d3a12e161a7f6afb522dbe8900a9c09bce06".as_bstr()]),
-                author: signature(1592391367),
-                committer: signature(1592391367),
+                author: signature(1_592_391_367),
+                committer: signature(1_592_391_367),
                 encoding: None,
                 message: b"update tasks\n".as_bstr(),
                 extra_headers: vec![(b"gpgsig".as_bstr(), b"magic:signature".as_bstr().into())]
@@ -93,7 +93,7 @@ tagger Daniel Lezcano <daniel.lezcano@linaro.org> 1591979433 +0200
 
 - Statically initialize .get_mode/.set_mode ops (Andrzej Pietrasiewicz)
 
-- Add Renesas R-Car maintainer entry (Niklas Söderlund)
+- Add Renesas R-Car maintainer entry (Niklas S\u{f6}derlund)
 
 - Fix error checking after calling ti_bandgap_get_sensor_data() for the TI SoC
   thermal (Sudip Mukherjee)
@@ -113,7 +113,7 @@ tagger Daniel Lezcano <daniel.lezcano@linaro.org> 1591979433 +0200
 - Fix platform dependency for the Qoriq driver (Geert Uytterhoeven)
 
 - Clean up the rcar_thermal_update_temp() function in the rcar thermal driver
-  (Niklas Söderlund)
+  (Niklas S\u{f6}derlund)
 
 - Fix the TMSAR register for the TMUv2 on the Qoriq platform (Yuantian Tang)
 
@@ -137,8 +137,8 @@ dS3aXZhRfaPqpdsWrMB9fY7ll+oyfw==
                 b"44ebe016df3aad96e3be8f95ec52397728dd7701".as_bstr(),
                 b"8d485da0ddee79d0e6713405694253d401e41b93".as_bstr(),
             ]),
-            author: linus_signature(1591996221),
-            committer: linus_signature(1591996221),
+            author: linus_signature(1_591_996_221),
+            committer: linus_signature(1_591_996_221),
             encoding: None,
             message: "Merge tag 'thermal-v5.8-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux
 
@@ -159,7 +159,7 @@ Pull thermal updates from Daniel Lezcano:
 
  - Statically initialize .get_mode/.set_mode ops (Andrzej Pietrasiewicz)
 
- - Add Renesas R-Car maintainer entry (Niklas Söderlund)
+ - Add Renesas R-Car maintainer entry (Niklas S\u{f6}derlund)
 
  - Fix error checking after calling ti_bandgap_get_sensor_data() for the
    TI SoC thermal (Sudip Mukherjee)
@@ -181,7 +181,7 @@ Pull thermal updates from Daniel Lezcano:
  - Fix platform dependency for the Qoriq driver (Geert Uytterhoeven)
 
  - Clean up the rcar_thermal_update_temp() function in the rcar thermal
-   driver (Niklas Söderlund)
+   driver (Niklas S\u{f6}derlund)
 
  - Fix the TMSAR register for the TMUv2 on the Qoriq platform (Yuantian
    Tang)
@@ -229,8 +229,8 @@ Pull thermal updates from Daniel Lezcano:
             Commit {
                 tree: b"00fc39317701176e326974ce44f5bd545a32ec0b".as_bstr(),
                 parents: SmallVec::from(vec![b"09d8d3a12e161a7f6afb522dbe8900a9c09bce06".as_bstr()]),
-                author: signature(1592391367),
-                committer: signature(1592391367),
+                author: signature(1_592_391_367),
+                committer: signature(1_592_391_367),
                 encoding: None,
                 message: b"update tasks\n".as_bstr(),
                 extra_headers: vec![(b"gpgsig".as_bstr(), b"-----BEGIN PGP SIGNATURE-----\n\niQEzBAABCAAdFiEEdjYp/sh4j8NRKLX27gKdHl60AwAFAl7p9tgACgkQ7gKdHl60\nAwBpegf+KQciv9AOIN7+yPmowecGxBnSfpKWTDzFxnyGR8dq63SpWT8WEKG5mf3a\nG6iUqpsDWaMHlzihaMKRvgRpZxFRbjnNPFBj6F4RRqfE+5R7k6DRSLUV5PqnsdSH\nuccfIDWi1imhsm7AaP5trwl1t+83U2JhHqPcPVFLMODYwWeO6NLR/JCzGSTQRa8t\nRgaVMKI19O/fge5OT5Ua8D47VKEhsJX0LfmkP5RfZQ8JJvNd40TupqKRdlv0sAzP\nya7NXkSHXCavHNR6kA+KpWxn900UoGK8/IDlwU6MeOkpPVawb3NFMqnc7KJDaC2p\nSMzpuEG8LTrCx2YSpHNLqHyzvQ1CZA==\n=5ITV\n-----END PGP SIGNATURE-----".as_bstr().into())]
@@ -246,8 +246,8 @@ Pull thermal updates from Daniel Lezcano:
             Commit {
                 tree: b"1973afa74d87b2bb73fa884aaaa8752aec43ea88".as_bstr(),
                 parents: SmallVec::from(vec![b"79c51cc86923e2b8ca0ee5c4eb75e48027133f9a".as_bstr()]),
-                author: signature(1592448995),
-                committer: signature(1592449083),
+                author: signature(1_592_448_995),
+                committer: signature(1_592_449_083),
                 encoding: Some(b"ISO-8859-1".as_bstr()),
                 message: b"encoding & sig".as_bstr(),
                 extra_headers: vec![(b"gpgsig".as_bstr(), b"-----BEGIN PGP SIGNATURE-----\n\niQEzBAABCAAdFiEEdjYp/sh4j8NRKLX27gKdHl60AwAFAl7q2DsACgkQ7gKdHl60\nAwDvewgAkL5UjEztzeVXlzceom0uCrAkCw9wSGLTmYcMKW3JwEaTRgQ4FX+sDuFT\nLZ8DoPu3UHUP0QnKrUwHulTTlKcOAvsczHbVPIKtXCxo6QpUfhsJQwz/J29kiE4L\nsOd+lqKGnn4oati/de2xwqNGi081fO5KILX75z6KfsAe7Qz7R3jxRF4uzHI033O+\nJc2Y827XeaELxW40SmzoLanWgEcdreXf3PstXEWW77CAu0ozXmvYj56vTviVybxx\nG7bc8lwc+SSKVe2VVB+CCfVbs0i541gmghUpZfMhUgaqttcCH8ysrUJDhne1BLG8\nCrOJIWTwAeEDtomV1p76qrMeqr1GFg==\n=qlSN\n-----END PGP SIGNATURE-----".as_bstr().into())]
@@ -263,8 +263,8 @@ Pull thermal updates from Daniel Lezcano:
             Commit {
                 tree: b"4a1c03029e7407c0afe9fc0320b3258e188b115e".as_bstr(),
                 parents: SmallVec::from(vec![b"7ca98aad461a5c302cb4c9e3acaaa6053cc67a62".as_bstr()]),
-                author: signature(1592438199),
-                committer: signature(1592438199),
+                author: signature(1_592_438_199),
+                committer: signature(1_592_438_199),
                 encoding: Some("ISO-8859-1".into()),
                 message: b"commit with encoding".as_bstr(),
                 extra_headers: vec![]
@@ -283,8 +283,8 @@ Pull thermal updates from Daniel Lezcano:
                     b"6a6054db4ce3c1e4e6a37f8c4d7acb63a4d6ad71".as_bstr(),
                     b"c91d592913d47ac4e4a76daf16fd649b276e211e".as_bstr()
                 ]),
-                author: signature(1592454703),
-                committer: signature(1592454738),
+                author: signature(1_592_454_703),
+                committer: signature(1_592_454_738),
                 encoding: Some("ISO-8859-1".into()),
                 message: b"Merge branch 'branch'".as_bstr(),
                 extra_headers: vec![]

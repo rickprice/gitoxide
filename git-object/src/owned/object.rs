@@ -15,40 +15,45 @@ pub enum Object {
 /// Convenient extraction of typed object.
 impl Object {
     /// Returns a [`Blob`][owned::Blob] if it is one.
+    #[must_use]
     pub fn as_blob(&self) -> Option<&owned::Blob> {
         match self {
-            Object::Blob(v) => Some(v),
+            Self::Blob(v) => Some(v),
             _ => None,
         }
     }
     /// Returns a [`Commit`][owned::Commit] if it is one.
+    #[must_use]
     pub fn as_commit(&self) -> Option<&owned::Commit> {
         match self {
-            Object::Commit(v) => Some(v),
+            Self::Commit(v) => Some(v),
             _ => None,
         }
     }
     /// Returns a [`Tree`][owned::Tree] if it is one.
+    #[must_use]
     pub fn as_tree(&self) -> Option<&owned::Tree> {
         match self {
-            Object::Tree(v) => Some(v),
+            Self::Tree(v) => Some(v),
             _ => None,
         }
     }
     /// Returns a [`Tag`][owned::Tag] if it is one.
+    #[must_use]
     pub fn as_tag(&self) -> Option<&owned::Tag> {
         match self {
-            Object::Tag(v) => Some(v),
+            Self::Tag(v) => Some(v),
             _ => None,
         }
     }
     /// Returns the kind of object stored in this instance.
+    #[must_use]
     pub fn kind(&self) -> crate::Kind {
         match self {
-            Object::Tree(_) => crate::Kind::Tree,
-            Object::Blob(_) => crate::Kind::Blob,
-            Object::Commit(_) => crate::Kind::Commit,
-            Object::Tag(_) => crate::Kind::Tag,
+            Self::Tree(_) => crate::Kind::Tree,
+            Self::Blob(_) => crate::Kind::Blob,
+            Self::Commit(_) => crate::Kind::Commit,
+            Self::Tag(_) => crate::Kind::Tag,
         }
     }
 }
@@ -57,7 +62,7 @@ impl Object {
 impl Object {
     /// Write the contained object to `out` in the git serialization format.
     pub fn write_to(&self, out: impl io::Write) -> io::Result<()> {
-        use Object::*;
+        use Object::{Blob, Commit, Tag, Tree};
         match self {
             Tree(v) => v.write_to(out),
             Blob(v) => v.write_to(out),
@@ -73,25 +78,25 @@ mod convert {
 
     impl From<Tag> for Object {
         fn from(v: Tag) -> Self {
-            Object::Tag(v)
+            Self::Tag(v)
         }
     }
 
     impl From<Commit> for Object {
         fn from(v: Commit) -> Self {
-            Object::Commit(v)
+            Self::Commit(v)
         }
     }
 
     impl From<Tree> for Object {
         fn from(v: Tree) -> Self {
-            Object::Tree(v)
+            Self::Tree(v)
         }
     }
 
     impl From<Blob> for Object {
         fn from(v: Blob) -> Self {
-            Object::Blob(v)
+            Self::Blob(v)
         }
     }
 

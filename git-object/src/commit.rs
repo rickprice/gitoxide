@@ -13,7 +13,7 @@ where
 {
     /// Create a new instance from an iterator over tuples of (name, value) pairs.
     pub fn new(iter: I) -> Self {
-        ExtraHeaders { inner: iter }
+        Self { inner: iter }
     }
     /// Find the _value_ of the _first_ header with the given `name`.
     pub fn find(mut self, name: &str) -> Option<&'a BStr> {

@@ -30,7 +30,7 @@ quick_error! {
 
 impl From<Error> for io::Error {
     fn from(err: Error) -> Self {
-        io::Error::new(io::ErrorKind::Other, err)
+        Self::new(io::ErrorKind::Other, err)
     }
 }
 

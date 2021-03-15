@@ -16,7 +16,7 @@ quick_error! {
 
 impl From<Error> for io::Error {
     fn from(err: Error) -> Self {
-        io::Error::new(io::ErrorKind::Other, err)
+        Self::new(io::ErrorKind::Other, err)
     }
 }
 
@@ -43,8 +43,9 @@ pub struct Entry {
 /// Serialization
 impl Mode {
     /// Return the representation as used in the git internal format.
+    #[must_use]
     pub fn as_bytes(&self) -> &'static [u8] {
-        use Mode::*;
+        use Mode::{Blob, BlobExecutable, Commit, Link, Tree};
         match self {
             Tree => b"40000",
             Blob => b"100644",
@@ -66,7 +67,7 @@ impl Tree {
             if filename.find_byte(b'\n').is_some() {
                 return Err(Error::NewlineInFilename(filename.to_owned()).into());
             }
-            out.write_all(&filename)?;
+            out.write_all(filename)?;
             out.write_all(&[b'\0'])?;
 
             out.write_all(&oid[..])?;

@@ -65,26 +65,26 @@ fn is_hex_digit_lc(b: u8) -> bool {
 }
 
 pub(crate) fn hex_sha1(i: &[u8]) -> IResult<&[u8], &BStr, Error> {
-    take_while_m_n(40usize, 40, is_hex_digit_lc)(i).map(|(i, o)| (i, o.as_bstr()))
+    take_while_m_n(40, 40, is_hex_digit_lc)(i).map(|(i, o)| (i, o.as_bstr()))
 }
 
 pub(crate) fn signature(i: &[u8]) -> IResult<&[u8], Signature<'_>, Error> {
     let (i, (name, email, time_in_seconds, tzsign, tzhour, tzminute)) = tuple((
-        terminated(take_until(&b" <"[..]), take(2usize)),
-        terminated(take_until(&b"> "[..]), take(2usize)),
-        terminated(take_until(SPACE), take(1usize)),
+        terminated(take_until(&b" <"[..]), take(2_usize)),
+        terminated(take_until(&b"> "[..]), take(2_usize)),
+        terminated(take_until(SPACE), take(1_usize)),
         alt((tag(b"-"), tag(b"+"))),
-        take_while_m_n(2usize, 2, is_digit),
-        take_while_m_n(2usize, 2, is_digit),
+        take_while_m_n(2, 2, is_digit),
+        take_while_m_n(2, 2, is_digit),
     ))(i)
     .map_err(Error::context(
         "tagger <name> <<email>> <time seconds since epoch> <+|-><HHMM>",
     ))?;
 
     let sign = if tzsign[0] == b'-' { Sign::Minus } else { Sign::Plus };
-    let hours = btoi::<i32>(&tzhour)
+    let hours = btoi::<i32>(tzhour)
         .map_err(|e| nom::Err::Error(Error::ParseIntegerError("invalid 'hours' string", tzhour.into(), e)))?;
-    let minutes = btoi::<i32>(&tzminute)
+    let minutes = btoi::<i32>(tzminute)
         .map_err(|e| nom::Err::Error(Error::ParseIntegerError("invalid 'minutes' string", tzminute.into(), e)))?;
     let offset = (hours * 3600 + minutes * 60) * if sign == Sign::Minus { -1 } else { 1 };
 
@@ -136,7 +136,13 @@ mod tests {
                 parse::signature(b"Sebastian Thiel <byronimo@gmail.com> 1528473343 -0230")
                     .expect("parse to work")
                     .1,
-                signature("Sebastian Thiel", "byronimo@gmail.com", 1528473343, Sign::Minus, -9000)
+                signature(
+                    "Sebastian Thiel",
+                    "byronimo@gmail.com",
+                    1_528_473_343,
+                    Sign::Minus,
+                    -9000
+                )
             );
         }
 
@@ -146,7 +152,7 @@ mod tests {
                 parse::signature(b"Sebastian Thiel <byronimo@gmail.com> 1528473343 +0230")
                     .expect("parse to work")
                     .1,
-                signature("Sebastian Thiel", "byronimo@gmail.com", 1528473343, Sign::Plus, 9000)
+                signature("Sebastian Thiel", "byronimo@gmail.com", 1_528_473_343, Sign::Plus, 9000)
             );
         }
 
@@ -156,7 +162,7 @@ mod tests {
                 parse::signature(b"Sebastian Thiel <byronimo@gmail.com> 1528473343 -0000")
                     .expect("parse to work")
                     .1,
-                signature("Sebastian Thiel", "byronimo@gmail.com", 1528473343, Sign::Minus, 0)
+                signature("Sebastian Thiel", "byronimo@gmail.com", 1_528_473_343, Sign::Minus, 0)
             );
         }
 

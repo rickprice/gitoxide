@@ -22,7 +22,7 @@ impl Into<owned::Tag> for borrowed::Tag<'_> {
             pgp_signature,
         } = self;
         owned::Tag {
-            target: owned::Id::from_40_bytes_in_hex(&target).expect("40 bytes hex sha1"),
+            target: owned::Id::from_40_bytes_in_hex(target).expect("40 bytes hex sha1"),
             name: name.to_owned(),
             target_kind,
             message: message.to_owned(),
@@ -44,7 +44,7 @@ impl Into<owned::Commit> for borrowed::Commit<'_> {
             extra_headers,
         } = self;
         owned::Commit {
-            tree: owned::Id::from_40_bytes_in_hex(&tree).expect("40 bytes hex sha1"),
+            tree: owned::Id::from_40_bytes_in_hex(tree).expect("40 bytes hex sha1"),
             parents: parents
                 .iter()
                 .map(|parent| owned::Id::from_40_bytes_in_hex(parent).expect("40 bytes hex sha1"))
@@ -63,7 +63,7 @@ impl Into<owned::Commit> for borrowed::Commit<'_> {
 
 impl<'a> From<borrowed::Blob<'a>> for owned::Blob {
     fn from(v: borrowed::Blob<'a>) -> Self {
-        owned::Blob {
+        Self {
             data: v.data.to_owned(),
         }
     }
@@ -92,10 +92,10 @@ impl Into<owned::tree::Entry> for borrowed::tree::Entry<'_> {
 impl<'a> From<borrowed::Object<'a>> for owned::Object {
     fn from(v: borrowed::Object<'_>) -> Self {
         match v {
-            borrowed::Object::Tree(v) => owned::Object::Tree(v.into()),
-            borrowed::Object::Blob(v) => owned::Object::Blob(v.into()),
-            borrowed::Object::Commit(v) => owned::Object::Commit(v.into()),
-            borrowed::Object::Tag(v) => owned::Object::Tag(v.into()),
+            borrowed::Object::Tree(v) => Self::Tree(v.into()),
+            borrowed::Object::Blob(v) => Self::Blob(v.into()),
+            borrowed::Object::Commit(v) => Self::Commit(v.into()),
+            borrowed::Object::Tag(v) => Self::Tag(v.into()),
         }
     }
 }

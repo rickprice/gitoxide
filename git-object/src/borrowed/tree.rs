@@ -44,13 +44,13 @@ impl TryFrom<&[u8]> for tree::Mode {
 
     fn try_from(mode: &[u8]) -> Result<Self, Self::Error> {
         Ok(match mode {
-            b"40000" => tree::Mode::Tree,
-            b"100644" => tree::Mode::Blob,
-            b"100664" => tree::Mode::Blob, // rare and found in the linux kernel
-            b"100640" => tree::Mode::Blob, // rare and found in the Rust repo
-            b"100755" => tree::Mode::BlobExecutable,
-            b"120000" => tree::Mode::Link,
-            b"160000" => tree::Mode::Commit,
+            b"40000" => Self::Tree,
+            b"100644" => Self::Blob,
+            b"100664" => Self::Blob, // rare and found in the linux kernel
+            b"100640" => Self::Blob, // rare and found in the Rust repo
+            b"100755" => Self::BlobExecutable,
+            b"120000" => Self::Link,
+            b"160000" => Self::Commit,
             _ => return Err(Error::NomDetail(mode.into(), "unknown tree mode")),
         })
     }
@@ -61,7 +61,7 @@ fn parse_entry(i: &[u8]) -> IResult<&[u8], Entry<'_>, Error> {
     let (i, mode) = terminated(take_while_m_n(5, 6, is_digit), tag(SPACE))(i)?;
     let mode = tree::Mode::try_from(mode).map_err(nom::Err::Error)?;
     let (i, filename) = terminated(take_while1(|b| b != NULL[0]), tag(NULL))(i)?;
-    let (i, oid) = take(20u8)(i)?;
+    let (i, oid) = take(20_u8)(i)?;
 
     Ok((
         i,

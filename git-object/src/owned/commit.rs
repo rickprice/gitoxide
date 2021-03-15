@@ -32,6 +32,7 @@ pub struct Commit {
 
 impl Commit {
     /// Returns a convenient iterator over all extra headers.
+    #[must_use]
     pub fn extra_headers(&self) -> commit::ExtraHeaders<impl Iterator<Item = (&BStr, &BStr)>> {
         commit::ExtraHeaders::new(self.extra_headers.iter().map(|(k, v)| (k.as_bstr(), v.as_bstr())))
     }

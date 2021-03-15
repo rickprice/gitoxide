@@ -55,6 +55,7 @@ impl<'a> Object<'a> {
     }
 
     /// Convert the borrowed object into an owned, mutable version, consuming the source in the process.
+    #[must_use]
     pub fn into_owned(self) -> crate::owned::Object {
         self.into()
     }
@@ -63,6 +64,7 @@ impl<'a> Object<'a> {
 /// Convenient access to contained objects.
 impl<'a> Object<'a> {
     /// Interpret this object as blob.
+    #[must_use]
     pub fn as_blob(&self) -> Option<&borrowed::Blob<'_>> {
         match self {
             Object::Blob(v) => Some(v),
@@ -70,6 +72,7 @@ impl<'a> Object<'a> {
         }
     }
     /// Interpret this object as commit.
+    #[must_use]
     pub fn as_commit(&self) -> Option<&borrowed::Commit<'a>> {
         match self {
             Object::Commit(v) => Some(v),
@@ -77,6 +80,7 @@ impl<'a> Object<'a> {
         }
     }
     /// Interpret this object as tree.
+    #[must_use]
     pub fn as_tree(&self) -> Option<&borrowed::Tree<'_>> {
         match self {
             Object::Tree(v) => Some(v),
@@ -84,6 +88,7 @@ impl<'a> Object<'a> {
         }
     }
     /// Interpret this object as tag.
+    #[must_use]
     pub fn as_tag(&self) -> Option<&borrowed::Tag<'_>> {
         match self {
             Object::Tag(v) => Some(v),
@@ -91,6 +96,7 @@ impl<'a> Object<'a> {
         }
     }
     /// Return the kind of object.
+    #[must_use]
     pub fn kind(&self) -> Kind {
         match self {
             Object::Tree(_) => Kind::Tree,
