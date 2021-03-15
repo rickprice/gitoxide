@@ -222,8 +222,8 @@ fn pack_lookup() -> Result<(), Box<dyn std::error::Error>> {
                     6 => 1,
                 },
                 total_compressed_entries_size: 51753,
-                total_decompressed_entries_size: 103701,
-                total_object_size: 288658,
+                total_decompressed_entries_size: 103_701,
+                total_object_size: 288_658,
                 num_commits: 10,
                 num_blobs: 5,
                 num_tags: 0,
@@ -247,8 +247,8 @@ fn pack_lookup() -> Result<(), Box<dyn std::error::Error>> {
                     1 => 3
                 },
                 total_compressed_entries_size: 48867,
-                total_decompressed_entries_size: 132823,
-                total_object_size: 140243,
+                total_decompressed_entries_size: 132_823,
+                total_object_size: 140_243,
                 num_commits: 2,
                 num_blobs: 63,
                 num_tags: 0,
@@ -353,7 +353,7 @@ fn pack_lookup() -> Result<(), Box<dyn std::error::Error>> {
                     .compressed
                     .expect("bytes present in default configuration of streaming iter")
                     .len() as u64,
-                next_offset - entry.pack_offset - entry.header_size as u64,
+                next_offset - entry.pack_offset - u64::from(entry.header_size),
                 "we get the compressed bytes region after the head to the next entry"
             );
         }

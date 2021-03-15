@@ -78,7 +78,7 @@ mod new_from_header {
                 assert_eq!(entry.crc32.is_none(), !compression_mode.crc32());
                 assert_eq!(entry.compressed.is_none(), !compression_mode.keep());
                 if compression_mode.crc32() {
-                    assert_eq!(entry.crc32.expect("crc32 computed"), 3627824263);
+                    assert_eq!(entry.crc32.expect("crc32 computed"), 3_627_824_263);
                 }
                 if compression_mode.keep() {
                     assert_eq!(
