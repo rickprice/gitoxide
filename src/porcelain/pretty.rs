@@ -57,7 +57,7 @@ mod options {
 }
 
 pub fn main() -> Result<()> {
-    use options::*;
+    use options::{Args, Subcommands};
     let args = Args::parse();
     git_features::interrupt::init_handler(std::io::stderr());
     let verbose = true;
