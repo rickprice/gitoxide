@@ -114,10 +114,13 @@ impl<T> Tree<T> {
             }
         })?;
         assert!(
-            self.last_child_base_offset >= base_offset,
-            "Expected children to be placed in order"
+            base_offset >= self.last_child_base_offset,
+            "Expected children to be placed in order, got {} >= {}",
+            self.last_child_base_offset,
+            base_offset
         );
         self.last_child_base_offset = base_offset;
+        dbg!("it worked");
         let child_index = items.len();
         items[base_index].children.push(child_index);
         items.push(Item {
