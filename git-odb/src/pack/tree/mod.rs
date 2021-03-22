@@ -45,6 +45,7 @@ pub struct Item<T> {
 pub struct Tree<T> {
     items: UnsafeCell<Vec<Item<T>>>,
     last_added_offset: u64,
+    last_child_base_offset: u64,
     one_past_last_seen_root: usize,
     pack_entries_end: Option<u64>,
 }
@@ -63,6 +64,7 @@ impl<T> Tree<T> {
         Ok(Tree {
             items: UnsafeCell::new(Vec::with_capacity(num_objects)),
             last_added_offset: 0,
+            last_child_base_offset: 0,
             one_past_last_seen_root: 0,
             pack_entries_end: None,
         })
@@ -111,6 +113,11 @@ impl<T> Tree<T> {
                 base_pack_offset: base_offset,
             }
         })?;
+        assert!(
+            self.last_child_base_offset >= base_offset,
+            "Expected children to be placed in order"
+        );
+        self.last_child_base_offset = base_offset;
         let child_index = items.len();
         items[base_index].children.push(child_index);
         items.push(Item {
